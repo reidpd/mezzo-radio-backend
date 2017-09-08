@@ -1,0 +1,14 @@
+{
+  "name": "mezzo-radio-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:reidpd/mezzo-radio-backend.git",
+  "author": "Reid Delahunt <reidpierredelahunt@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.4",
+    "knex": "^0.13.0",
+    "passport": "^0.4.0",
+    "passport-spotify": "^0.3.1"
+  }
+}
