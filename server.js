@@ -32,7 +32,7 @@ passport.use(
         url,
         data: {
           grant_type: 'authorization_code',
-          code: accessToken.query.code,
+          code: profile,
           redirect_uri: credentials.callbackURL,
         },
         headers: {
