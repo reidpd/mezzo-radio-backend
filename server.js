@@ -1,6 +1,7 @@
 const express = require('express');
 const knex = require('knex');
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -46,7 +47,10 @@ const app = express();
 
 app.use(cookieParser());
 app.use(bodyParser());
-app.use(session({ secret: 'cookie_secret' }));
+app.use(session({
+  secret: 'cookie_secret',
+  store: new RedisStore({host: '127.0.0.1', port: 6379}),
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
