@@ -33,6 +33,7 @@ passport.use(
       }).then(response => {
         console.log(response);
       })
+      console.log('accessToken ===', accessToken);
       return done(null, profile);
       // newUser = {
       //   spotify_id: profile.id,
