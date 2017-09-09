@@ -7,13 +7,11 @@ const RedisStore = require('connect-redis')(session);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const axios = require('axios');
+const base64 = require('base-64');
 const passport = require('passport');
 require('dotenv').config();
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const credentials = require('./config/auth.js').credentials;
-
-const stringToEncode = credentials.clientID + ':' + credentials.clientSecret;
-const idSecretEncoding = window.btoa(stringToEncode);
 
 passport.serializeUser(function(user, done) { done(null, user); });
 passport.deserializeUser(function(obj, done) { done(null, obj); });
@@ -27,8 +25,8 @@ passport.use(
       console.log('strategy fn');
       console.log('profile.id === ', profile);
       const url = "https://accounts.spotify.com/api/token";
-      // const stringToEncode = credentials.clientID + ':' + credentials.clientSecret;
-      // const idSecretEncoding = window.btoa(stringToEncode);
+      const stringToEncode = credentials.clientID + ':' + credentials.clientSecret;
+      const idSecretEncoding = base64.encode(stringToEncode);
       axios({
         method: 'get',
         url,
