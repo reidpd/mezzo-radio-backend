@@ -61,8 +61,11 @@ app.get(
 );
 
 app.get(
-  '/auth/spotify/callback',
-  passport.authenticate('spotify', { successRedirect: '/auth/spotify/success', failureRedirect: '/auth/spotify/failure' })
+  '/callback',
+  passport.authenticate('spotify', { /* successRedirect: '/auth/spotify/success', */ failureRedirect: '/auth/spotify/failure' }),
+  function(req, res) {
+    res.redirect('localhost:3000/');
+  }
 );
 
 app.get(
