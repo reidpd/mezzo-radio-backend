@@ -71,6 +71,7 @@ app.get(
     knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
       let string = encodeURIComponent(JSON.stringify(user));
       res.redirect('/?' + string);
+      console.log(user);
     });
   }
 );
