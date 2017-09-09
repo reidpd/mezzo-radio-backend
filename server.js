@@ -28,7 +28,7 @@ passport.use(
         method: 'get',
         url,
         headers: {
-          'Authorization': "Bearer " + profile,
+          'Authorization': "Bearer " + accessToken.query.code,
         }
       }).then(response => {
         console.log(response);
