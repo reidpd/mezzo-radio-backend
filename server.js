@@ -20,6 +20,7 @@ passport.use(
     credentials,
     (accessToken, refreshToken, profile, done) => {
       console.log('strategy fn');
+      console.log('profile.id === ', profile.id);
       // newUser = {
       //   spotify_id: profile.id,
       //   images: JSON.stringify(profile.images),
