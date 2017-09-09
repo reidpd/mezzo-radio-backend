@@ -73,10 +73,10 @@ app.get(
       failureRedirect: '/auth/spotify/failure'
     }
   ),
-  // function(req, res) {
-  //   console.log('/callback fn');
-  //   res.redirect('localhost:3000/');
-  // }
+  function(req, res) {
+    console.log('/callback fn');
+    res.redirect('localhost:3000/');
+  }
 );
 
 app.get(
