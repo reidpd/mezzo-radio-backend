@@ -12,7 +12,7 @@ const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const callbackURL = process.env.SPOTIFY_CALLBACK_URL;
 
 const credentials = { clientID, clientSecret, callbackURL };
-console.log(credentials);
+console.log('credentials === ', credentials);
 // console.log('process.env.SPOTIFY_CLIENT_ID === ', process.env.SPOTIFY_CLIENT_ID);
 
 passport.serializeUser(function(user, done) { done(null, user); });
