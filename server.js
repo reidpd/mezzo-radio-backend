@@ -33,7 +33,7 @@ passport.use(
       }).then(response => {
         console.log(response);
       })
-      res.redirect('localhost:3000/?code=' + profile);
+      return done(null, profile);
       // newUser = {
       //   spotify_id: profile.id,
       //   images: JSON.stringify(profile.images),
