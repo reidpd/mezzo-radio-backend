@@ -1,3 +1,5 @@
+// Base URL: https://mezzo-radio-api.herokuapp.com/
+
 const express = require('express');
 const knex = require('knex');
 const session = require('express-session');
