@@ -33,7 +33,7 @@ passport.user(
         }
       })
     }
-  );
+  )
 );
 
 const app = express();
