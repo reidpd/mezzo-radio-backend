@@ -19,22 +19,23 @@ passport.use(
   new SpotifyStrategy(
     credentials,
     (accessToken, refreshToken, profile, done) => {
-      newUser = {
-        spotify_id: profile.id,
-        images: JSON.stringify(profile.images),
-        email: profile.email,
-      };
-
-      knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
-        if (user) { // user exists in the user table
-          knex('users').update(newUser, '*').where('spotify_id', newUser.spotify_id).then(result => console.lg('result is', result));
-          return done(null, newUser);
-        } else { // user doesn't exist in the user table yet
-          knex('users').insert(newUser, '*').catch(err => console.log('Spotify did not authenticate you'));
-          return done(null, newUser);
-        }
-      })
-      console.log(accessToken);
+      console.log('strategy fn');
+      // newUser = {
+      //   spotify_id: profile.id,
+      //   images: JSON.stringify(profile.images),
+      //   email: profile.email,
+      // };
+      //
+      // knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
+      //   if (user) { // user exists in the user table
+      //     knex('users').update(newUser, '*').where('spotify_id', newUser.spotify_id).then(result => console.lg('result is', result));
+      //     return done(null, newUser);
+      //   } else { // user doesn't exist in the user table yet
+      //     knex('users').insert(newUser, '*').catch(err => console.log('Spotify did not authenticate you'));
+      //     return done(null, newUser);
+      //   }
+      // })
+      // console.log(accessToken);
     }
   )
 );
@@ -66,7 +67,7 @@ app.get(
   '/callback',
   passport.authenticate('spotify', { /* successRedirect: '/auth/spotify/success', */ failureRedirect: '/auth/spotify/failure' }),
   function(req, res) {
-
+    console.log('/callback fn');
     res.redirect('localhost:3000/');
   }
 );
@@ -74,9 +75,10 @@ app.get(
 app.get(
   '/auth/spotify/success',
   (req, res, next) => {
+    console.log('/success fn');
     knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
       let string = encodeURIComponent(JSON.stringify(user));
-      
+
       // string.concat("PEEPEE");
       res.redirect('localhost:3000/?' + string);
     });
