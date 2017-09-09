@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
-const { credentials } = require('config/auth.js');
+const { credentials } = require('./config/auth.js');
 
 
 passport.serializeUser(function(user, done) { done(null, user); });
