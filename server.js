@@ -3,10 +3,10 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
+require('dotenv').config();
 const SpotifyStrategy = require('passport-spotify').Strategy;
 // const credentials = require('./config/auth.js').credentials;
 
-require('dotenv').config();
 const clientID = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const callbackURL = process.env.SPOTIFY_CALLBACK_URL;
