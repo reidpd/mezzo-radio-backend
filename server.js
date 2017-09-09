@@ -83,5 +83,6 @@ app.get(
 
 app.get('/auth/spotify/failure', (req, res) => { res.json('user is not authenticated yet') });
 
+const port = process.env.PORT || 8888;
 
-app.listen(8888);
+app.listen(port, () => { console.log('Listening on port', port) });
