@@ -23,18 +23,25 @@ passport.use(
     (accessToken, refreshToken, profile, done) => {
       console.log('strategy fn');
       console.log('profile.id === ', profile);
-      const url = "https://api.spotify.com/v1/me";
+      const url = "https://accounts.spotify.com/api/token";
+      const stringToEncode = credentials.clientID + ':' + credentials.clientSecret;
+      const idSecretEncoding = window.btoa(stringToEncode);
       axios({
         method: 'get',
         url,
+        data: {
+          grant_type: 'authorization_code',
+          code: accessToken.query.code,
+          redirect_uri: credentials.callbackURL,
+        },
         headers: {
-          'Authorization': "Bearer " + accessToken.query.code,
+          'Authorization': "Basic " + idSecretEncoding,
         }
       }).then(response => {
         console.log(response);
       })
       console.log('accessToken ===', accessToken.query.code);
-      return done(null, profile);
+      // return done(null, profile);
       // newUser = {
       //   spotify_id: profile.id,
       //   images: JSON.stringify(profile.images),
