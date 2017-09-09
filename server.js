@@ -70,7 +70,7 @@ app.get(
   (req, res, next) => {
     knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
       let string = encodeURIComponent(JSON.stringify(user));
-      res.redirect('localhost:3000/?' + string);
+      res.redirect('/?' + string);
     });
   }
 );
