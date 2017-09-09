@@ -5,8 +5,8 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const credentials = require('./config/auth.js').credentials;
-// console.log(credentials);
 require('dotenv').config();
+console.log(credentials);
 
 passport.serializeUser(function(user, done) { done(null, user); });
 passport.deserializeUser(function(obj, done) { done(null, obj); });
