@@ -66,11 +66,11 @@ app.get(
 
 app.get(
   '/callback',
-  passport.authenticate('spotify', { /* successRedirect: '/auth/spotify/success', */ failureRedirect: '/auth/spotify/failure' }),
-  function(req, res) {
-    console.log('/callback fn');
-    res.redirect('localhost:3000/');
-  }
+  passport.authenticate('spotify', { successRedirect: '/auth/spotify/success', failureRedirect: '/auth/spotify/failure' }),
+  // function(req, res) {
+  //   console.log('/callback fn');
+  //   res.redirect('localhost:3000/');
+  // }
 );
 
 app.get(
@@ -78,9 +78,8 @@ app.get(
   (req, res, next) => {
     console.log('/success fn');
     knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
+      console.log(user);
       let string = encodeURIComponent(JSON.stringify(user));
-
-      // string.concat("PEEPEE");
       res.redirect('localhost:3000/?' + string);
     });
   }
