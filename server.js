@@ -28,7 +28,6 @@ passport.use(
       newUser = {
         spotify_id: profile.id,
         images: JSON.stringify(profile.images),
-
         email: profile.email,
       };
 
