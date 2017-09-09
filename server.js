@@ -81,7 +81,7 @@ app.get(
   passport.authenticate(
     'spotify',
     {
-      successRedirect: '/auth/spotify/success',
+      // successRedirect: '/auth/spotify/success',
       failureRedirect: '/auth/spotify/failure'
     }
   ),
