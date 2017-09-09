@@ -7,7 +7,7 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 const credentials = require('./config/auth.js').credentials;
 require('dotenv').config();
 console.log(credentials);
-console.log(process.env.SPOTIFY_CALLBACK_URL);
+console.log('process.env === ', process.env);
 
 passport.serializeUser(function(user, done) { done(null, user); });
 passport.deserializeUser(function(obj, done) { done(null, obj); });
