@@ -21,6 +21,14 @@ passport.use(
     (accessToken, refreshToken, profile, done) => {
       console.log('strategy fn');
       console.log('profile.id === ', profile);
+      const url = "https://accounts.spotify.com/api/token";
+      axios.post(url, {
+        grant_type: 'authorization_code',
+        code: profile,
+        redirect_uri: credentials.callbackURL,
+      }).then(response => {
+        console.log(response);
+      })
       // newUser = {
       //   spotify_id: profile.id,
       //   images: JSON.stringify(profile.images),
