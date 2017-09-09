@@ -1,4 +1,5 @@
 const express = require('express');
+const knex = require('knex');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -12,7 +13,7 @@ const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const callbackURL = process.env.SPOTIFY_CALLBACK_URL;
 
 const credentials = { clientID, clientSecret, callbackURL, passReqToCallback: true };
-console.log('credentials === ', credentials);
+console.log('credentials === ', credentials.clientID);
 // console.log('process.env.SPOTIFY_CLIENT_ID === ', process.env.SPOTIFY_CLIENT_ID);
 
 passport.serializeUser(function(user, done) { done(null, user); });
