@@ -18,21 +18,22 @@ passport.use(
   new SpotifyStrategy(
     credentials,
     (accessToken, refreshToken, profile, done) => {
-      newUser = {
-        spotify_id: profile.id,
-        images: JSON.stringify(profile.images),
-        email: profile.email,
-      };
-
-      knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
-        if (user) { // user exists in the user table
-          knex('users').update(newUser, '*').where('spotify_id', newUser.spotify_id).then(result => console.lg('result is', result));
-          return done(null, newUser);
-        } else { // user doesn't exist in the user table yet
-          knex('users').insert(newUser, '*').catch(err => console.log('Spotify did not authenticate you'));
-          return done(null, newUser);
-        }
-      })
+      // newUser = {
+      //   spotify_id: profile.id,
+      //   images: JSON.stringify(profile.images),
+      //   email: profile.email,
+      // };
+      //
+      // knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
+      //   if (user) { // user exists in the user table
+      //     knex('users').update(newUser, '*').where('spotify_id', newUser.spotify_id).then(result => console.lg('result is', result));
+      //     return done(null, newUser);
+      //   } else { // user doesn't exist in the user table yet
+      //     knex('users').insert(newUser, '*').catch(err => console.log('Spotify did not authenticate you'));
+      //     return done(null, newUser);
+      //   }
+      // })
+      console.log(accessToken);
     }
   )
 );
@@ -64,6 +65,7 @@ app.get(
   '/callback',
   passport.authenticate('spotify', { /* successRedirect: '/auth/spotify/success', */ failureRedirect: '/auth/spotify/failure' }),
   function(req, res) {
+
     res.redirect('localhost:3000/');
   }
 );
