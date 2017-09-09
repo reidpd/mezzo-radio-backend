@@ -4,6 +4,7 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const axios = require('axios');
 const passport = require('passport');
 require('dotenv').config();
 const SpotifyStrategy = require('passport-spotify').Strategy;
@@ -18,21 +19,21 @@ passport.use(
   new SpotifyStrategy(
     credentials,
     (accessToken, refreshToken, profile, done) => {
-      // newUser = {
-      //   spotify_id: profile.id,
-      //   images: JSON.stringify(profile.images),
-      //   email: profile.email,
-      // };
-      //
-      // knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
-      //   if (user) { // user exists in the user table
-      //     knex('users').update(newUser, '*').where('spotify_id', newUser.spotify_id).then(result => console.lg('result is', result));
-      //     return done(null, newUser);
-      //   } else { // user doesn't exist in the user table yet
-      //     knex('users').insert(newUser, '*').catch(err => console.log('Spotify did not authenticate you'));
-      //     return done(null, newUser);
-      //   }
-      // })
+      newUser = {
+        spotify_id: profile.id,
+        images: JSON.stringify(profile.images),
+        email: profile.email,
+      };
+
+      knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
+        if (user) { // user exists in the user table
+          knex('users').update(newUser, '*').where('spotify_id', newUser.spotify_id).then(result => console.lg('result is', result));
+          return done(null, newUser);
+        } else { // user doesn't exist in the user table yet
+          knex('users').insert(newUser, '*').catch(err => console.log('Spotify did not authenticate you'));
+          return done(null, newUser);
+        }
+      })
       console.log(accessToken);
     }
   )
@@ -75,6 +76,7 @@ app.get(
   (req, res, next) => {
     knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
       let string = encodeURIComponent(JSON.stringify(user));
+      
       // string.concat("PEEPEE");
       res.redirect('localhost:3000/?' + string);
     });

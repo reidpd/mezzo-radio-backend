@@ -6,6 +6,7 @@
   "author": "Reid Delahunt <reidpierredelahunt@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.17.2",
     "connect-redis": "^3.3.0",
     "cookie-parser": "^1.4.3",
