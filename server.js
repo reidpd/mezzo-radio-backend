@@ -6,15 +6,13 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 require('dotenv').config();
 const SpotifyStrategy = require('passport-spotify').Strategy;
-// const credentials = require('./config/auth.js').credentials;
+const credentials = require('./config/auth.js').credentials;
 
-const clientID = process.env.SPOTIFY_CLIENT_ID;
-const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-const callbackURL = process.env.SPOTIFY_CALLBACK_URL;
-
-const credentials = { clientID, clientSecret, callbackURL, passReqToCallback: true };
-console.log('credentials === ', credentials.clientID);
-// console.log('process.env.SPOTIFY_CLIENT_ID === ', process.env.SPOTIFY_CLIENT_ID);
+// const clientID = process.env.SPOTIFY_CLIENT_ID;
+// const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+// const callbackURL = process.env.SPOTIFY_CALLBACK_URL;
+//
+// const credentials = { clientID, clientSecret, callbackURL, passReqToCallback: true };
 
 passport.serializeUser(function(user, done) { done(null, user); });
 passport.deserializeUser(function(obj, done) { done(null, obj); });
