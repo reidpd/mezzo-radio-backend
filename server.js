@@ -14,6 +14,7 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 
 const Spotify = require('spotify-web-api-node');
 const credentials = require('./config/auth.js').credentials;
+console.log(credentials);
 const spotifyApi = new Spotify(credentials);
 
 const STATE_KEY = 'spotify_auth_state';
