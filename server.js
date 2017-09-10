@@ -85,7 +85,7 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-app.get('/login', (_, res) => {
+app.get('/auth/spotify', (_, res) => {
   const state = generateRandomString(16);
   res.cookie(STATE_KEY, state);
   res.redirect(spotifyApi.createAuthorizeURL(scopes, state));
