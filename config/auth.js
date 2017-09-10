@@ -1,8 +1,8 @@
 require('dotenv').config();
-const clientID = process.env.SPOTIFY_CLIENT_ID;
+const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-const callbackURL = process.env.SPOTIFY_CALLBACK_URL;
+const redirectUri = process.env.SPOTIFY_CALLBACK_URL;
 
-const credentials = { clientID, clientSecret, callbackURL, passReqToCallback: true };
+const credentials = { clientId, clientSecret, redirectUri, passReqToCallback: true };
 
 module.exports = { credentials };
