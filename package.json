@@ -17,7 +17,8 @@
     "knex": "^0.13.0",
     "passport": "^0.4.0",
     "passport-spotify": "^0.3.1",
-    "pg": "^7.3.0"
+    "pg": "^7.3.0",
+    "spotify-web-api-node": "^2.5.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
