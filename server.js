@@ -97,7 +97,7 @@ app.get('/login', (_, res) => {
  * parameter. Then, if all is good, redirect the user to the user page. If all
  * is not good, redirect the user to an error page
  */
-router.get('/callback', (req, res) => {
+app.get('/callback', (req, res) => {
   const { code, state } = req.query;
   const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
   // first do state validation
