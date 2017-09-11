@@ -102,10 +102,8 @@ app.get('/callback', (req, res) => {
   const { code, state } = req.query;
   const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
   // first do state validation
-  if (state === null || state !== storedState) {
-    res.redirect('/#/error/state mismatch');
-  // if the state is valid, get the authorization code and pass it on to the client
-  } else {
+  if (state === null || state !== storedState) { res.redirect('/#/error/state mismatch'); }
+  else { // if the state is valid, get the authorization code and pass it on to the client
     res.clearCookie(STATE_KEY);
     // Retrieve an access token and a refresh token
     spotifyApi.authorizationCodeGrant(code).then(data => {
@@ -121,9 +119,9 @@ app.get('/callback', (req, res) => {
       });
 
       // we can also pass the token to the browser to make requests from there
-      res.redirect(`/#/user/${access_token}/${refresh_token}`);
+      res.redirect(`localhost:3000/interface/${access_token}/${refresh_token}`);
     }).catch(err => {
-      res.redirect('/#/error/invalid token');
+      res.redirect('localhost:3000/error/invalid token');
     });
   }
 });
