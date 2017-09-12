@@ -119,7 +119,8 @@ app.get('/callback', (req, res) => {
       });
 
       // we can also pass the token to the browser to make requests from there
-      const url = 'localhost:3000/interface/' + access_token + '/' + refresh_token;
+      const tokens = encodeURIComponent(JSON.stringify({ access_token, refresh_token });)
+      const url = 'localhost:3000/interface/?' + tokens;
       res.redirect(url);
       console.log(url)
       console.log('this should never get here');
