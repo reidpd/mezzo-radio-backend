@@ -99,7 +99,6 @@ app.get('/auth/spotify', (_, res) => {
  * is not good, redirect the user to an error page
  */
 app.get('/callback', (req, res) => {
-  res.redirect('localhost:3000/interface')
   const { code, state } = req.query;
   const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
   // first do state validation
@@ -122,9 +121,9 @@ app.get('/callback', (req, res) => {
       // we can also pass the token to the browser to make requests from there
       const tokens = encodeURIComponent(JSON.stringify(data.body));
       const url = 'localhost:3000/interface/?' + tokens;
-      res.redirect(url);
       console.log(url)
-      console.log('this should never get here');
+      res.redirect(url);
+      res.end();
     }).catch(err => {
       res.redirect('localhost:3000/error/invalid token');
     });
