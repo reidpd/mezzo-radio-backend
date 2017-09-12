@@ -116,14 +116,13 @@ app.get('/callback', (req, res) => {
       // use the access token to access the Spotify Web API
       spotifyApi.getMe().then(({ body }) => {
         console.log(body);
-        res.redirect('localhost:3000/interface');
       });
 
       // we can also pass the token to the browser to make requests from there
       const tokens = encodeURIComponent(JSON.stringify(data.body));
       const url = 'localhost:3000/interface/?' + tokens;
       console.log(url)
-      res.redirect(url);
+      res.send(url);
       res.end();
     }).catch(err => {
       res.redirect('localhost:3000/error/invalid token');

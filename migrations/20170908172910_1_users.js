@@ -6,6 +6,9 @@ exports.up = function(knex, Promise) {
     table.string('images').notNullable().defaultTo('');
     table.string('email').notNullable().defaultTo('');
     table.string('display_name').notNullable().defaultTo('');
+    table.string('access_token').notNullable().defaultTo('');
+    table.string('refresh_token').notNullable().defaultTo('');
+    table.string('authorization_code').notNullable().defaultTo('');
     table.timestamps(true, true);
   });
 };
