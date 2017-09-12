@@ -121,6 +121,7 @@ app.get('/callback', (req, res) => {
           user.refresh_token = refresh_token;
           user.authorization_code = code;
           console.log(user);
+          console.log('wut');
           let string = encodeURIComponent(JSON.stringify(user));
           res.redirect('localhost:3000/?' + string);
         });
