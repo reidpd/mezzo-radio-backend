@@ -119,7 +119,10 @@ app.get('/callback', (req, res) => {
       });
 
       // we can also pass the token to the browser to make requests from there
-      res.redirect('localhost:3000/interface/?access_token=' + access_token + '&refresh_token=' + refresh_token);
+      const url = 'localhost:3000/interface/?access_token=' + access_token + '&refresh_token=' + refresh_token;
+      res.redirect(url);
+      console.log(url)
+      console.log('this should never get here');
     }).catch(err => {
       res.redirect('localhost:3000/error/invalid token');
     });
