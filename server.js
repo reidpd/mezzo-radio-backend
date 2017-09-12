@@ -116,6 +116,7 @@ app.get('/callback', (req, res) => {
       // use the access token to access the Spotify Web API
       spotifyApi.getMe().then(({ body }) => {
         let newUser = body;
+        console.log(newUser);
         knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
           user.access_token = access_token;
           user.refresh_token = refresh_token;
