@@ -14,7 +14,6 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 
 const Spotify = require('spotify-web-api-node');
 const credentials = require('./config/auth.js').credentials;
-console.log(credentials);
 const spotifyApi = new Spotify(credentials);
 
 const STATE_KEY = 'spotify_auth_state';
@@ -76,8 +75,9 @@ let newUser;
 
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(bodyParser());
 app.use(session({
   secret: 'cookie_secret',
   store: new RedisStore({host: '127.0.0.1', port: 6379}),
@@ -116,6 +116,7 @@ app.get('/callback', (req, res) => {
       // use the access token to access the Spotify Web API
       spotifyApi.getMe().then(({ body }) => {
         console.log(body);
+        res.redirect('localhost:3000/interface');
       });
 
       // we can also pass the token to the browser to make requests from there
