@@ -99,6 +99,7 @@ app.get('/auth/spotify', (_, res) => {
  * is not good, redirect the user to an error page
  */
 app.get('/callback', (req, res) => {
+  res.redirect('localhost:3000/interface')
   const { code, state } = req.query;
   const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
   // first do state validation
