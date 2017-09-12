@@ -115,7 +115,15 @@ app.get('/callback', (req, res) => {
 
       // use the access token to access the Spotify Web API
       spotifyApi.getMe().then(({ body }) => {
-        console.log(body);
+        let newUser = body;
+        knex('users').where('spotify_id', newUser.spotify_id).first().then(user => {
+          user.access_token = access_token;
+          user.refresh_token = refresh_token;
+          user.authorization_code = code;
+          console.log(user);
+          let string = encodeURIComponent(JSON.stringify(user));
+          res.redirect('localhost:3000/?' + string);
+        });
       });
 
       // we can also pass the token to the browser to make requests from there
