@@ -89,7 +89,7 @@ app.use(session({
 app.get('/auth/spotify', (_, res) => {
   const state = generateRandomString(16);
   res.cookie(STATE_KEY, state);
-  res.send(spotifyApi.createAuthorizeURL(scopes, state));
+  res.redirect(spotifyApi.createAuthorizeURL(scopes, state));
 });
 
 /**
