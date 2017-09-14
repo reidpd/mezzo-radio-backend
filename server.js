@@ -132,7 +132,7 @@ app.get('/callback', (req, res) => {
 
       // we can also pass the token to the browser to make requests from there
       const tokens = encodeURIComponent(JSON.stringify(data.body));
-      const url = 'localhost:3000/interface/?' + tokens;
+      const url = 'http://localhost:3000/interface/?' + tokens;
       console.log(url)
       res.redirect(url); // useless?!?!?!?
       res.end();
