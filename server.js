@@ -90,7 +90,7 @@ app.get('/auth/spotify', (_, res) => {
   const state = generateRandomString(16);
   const showDialog = true;
   res.cookie(STATE_KEY, state);
-  res.redirect(spotifyApi.createAuthorizeURL(scopes, state, showDialog));
+  res.redirect(spotifyApi.createAuthorizeURL(scopes, state, showDia));
 });
 
 /**
@@ -108,6 +108,7 @@ app.get('/callback', (req, res) => {
     res.clearCookie(STATE_KEY);
     // Retrieve an access token and a refresh token
     spotifyApi.authorizationCodeGrant(code).then(data => {
+      console.log(data.body);
       const { expires_in, access_token, refresh_token } = data.body;
 
       // Set the access token on the API object to use it in later calls
