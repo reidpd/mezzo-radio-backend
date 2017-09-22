@@ -147,7 +147,10 @@ app.get('/refresh/:refresh_token', (req, res) => {
   spotifyApi.refreshAccessToken()
   .then(data => {
     console.log(data);
-    res.send(data);
+    data.body.refresh_token = req.params.refresh_token;
+    const tokens = encodeURIComponent(JSON.stringify(data.body));
+    const url = "http://localhost:3000/interface/?" + tokens;
+    res.redirect(url);
   }, err => console.log('Access token could not be refreshed because: ', err));
 });
 
