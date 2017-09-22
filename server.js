@@ -142,9 +142,11 @@ app.get('/callback', (req, res) => {
   }
 });
 
-app.get('/refresh', (req, res) => {
+app.get('/refresh/:refresh_token', (req, res) => {
+  spotifyApi.setRefreshToken(req.params.refresh_token);
   spotifyApi.refreshAccessToken()
   .then(data => {
+    console.log(data);
     res.send(data);
   }, err => console.log('Access token could not be refreshed because: ', err));
 });
