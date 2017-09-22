@@ -142,6 +142,13 @@ app.get('/callback', (req, res) => {
   }
 });
 
+app.get('/refresh', (req, res) => {
+  spotifyApi.refreshAccessToken()
+  .then(data => {
+    res.send(data);
+  }, err => console.log('Access token could not be refreshed because: ', err));
+});
+
 
 
 // app.use(passport.initialize());
