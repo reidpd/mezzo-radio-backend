@@ -23,11 +23,96 @@ const scopes = ['user-read-private', 'user-read-email', 'user-read-playback-stat
 /** Generates a random string containing numbers and letters of N characters */
 const generateRandomString = N => (Math.random().toString(36)+Array(N).join('0')).slice(2, N+2);
 
-// passport.serializeUser(function(user, done) { done(null, user); });
-// passport.deserializeUser(function(obj, done) { done(null, obj); });
-
 let newUser;
 
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(session({
+  secret: 'cookie_secret',
+  store: new RedisStore({host: '127.0.0.1', port: 6379}),
+  proxy: true,
+  resave: true,
+  saveUninitialized: true,
+}));
+
+app.get('/auth/spotify/:env', (req, res) => {
+  const env = req.params.env;
+  const state = generateRandomString(16);
+  const showDialog = true;
+  const stateObj = { state, env };
+  res.cookie(STATE_KEY, state);
+  res.redirect(spotifyApi.createAuthorizeURL(scopes, stateObj, showDialog));
+});
+
+/**
+ * The /callback endpoint - hit after the user logs in to spotifyApi
+ * Verify that the state we put in the cookie matches the state in the query
+ * parameter. Then, if all is good, redirect the user to the user page. If all
+ * is not good, redirect the user to an error page
+ */
+app.get('/callback', (req, res) => {
+  const { code, stateObj } = req.query;
+  const state = stateObj.state;
+  const env = stateObj.env;
+  console.log(env);
+  const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
+  // first do state validation
+  if (state === null || state !== storedState) { res.redirect('/#/error/state mismatch'); }
+  else { // if the state is valid, get the authorization code and pass it on to the client
+    res.clearCookie(STATE_KEY);
+    // Retrieve an access token and a refresh token
+    spotifyApi.authorizationCodeGrant(code).then(data => {
+      const { expires_in, access_token, refresh_token } = data.body;
+
+      // Set the access token on the API object to use it in later calls
+      spotifyApi.setAccessToken(access_token);
+      spotifyApi.setRefreshToken(refresh_token);
+
+      // use the access token to access the Spotify Web API
+      spotifyApi.getMe().then(({ body }) => {
+        let newUser = body;
+        // knex('users').where('spotify_id', newUser.id).first().then(user => {
+        //   user.access_token = access_token;
+        //   user.refresh_token = refresh_token;
+        //   user.authorization_code = code;
+        //   console.log(user);
+        //   console.log('wut');
+        //   let string = encodeURIComponent(JSON.stringify(user));
+        //   res.redirect('localhost:3000/?' + string);
+        // });
+      });
+
+      // we can also pass the token to the browser to make requests from there
+      const tokens = encodeURIComponent(JSON.stringify(data.body));
+      const prefix = (env === 'development') ? "http://localhost:3000/interface/?" : "https://mezzo-radio.herokuapp.com/interface/?";
+      const url = prefix + tokens;
+      console.log(url)
+      res.redirect(url);
+      res.end();
+    }).catch(err => {
+      res.redirect('localhost:3000/error/invalid token');
+    });
+  }
+});
+
+app.get('/refresh/:refresh_token', (req, res) => {
+  spotifyApi.setRefreshToken(req.params.refresh_token);
+  spotifyApi.refreshAccessToken()
+  .then(data => {
+    console.log(data);
+    data.body.refresh_token = req.params.refresh_token;
+    const tokens = encodeURIComponent(JSON.stringify(data.body));
+    const url = "http://localhost:3000/interface/?" + tokens;
+    res.redirect(url);
+  }, err => console.log('Access token could not be refreshed because: ', err));
+});
+
+
+// passport.serializeUser(function(user, done) { done(null, user); });
+// passport.deserializeUser(function(obj, done) { done(null, obj); });
 // passport.use(
 //   new SpotifyStrategy(
 //     credentials,
@@ -72,90 +157,6 @@ let newUser;
 //     }
 //   )
 // );
-
-const app = express();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(session({
-  secret: 'cookie_secret',
-  store: new RedisStore({host: '127.0.0.1', port: 6379}),
-  proxy: true,
-  resave: true,
-  saveUninitialized: true,
-}));
-
-app.get('/auth/spotify', (_, res) => {
-  const state = generateRandomString(16);
-  const showDialog = true;
-  res.cookie(STATE_KEY, state);
-  res.redirect(spotifyApi.createAuthorizeURL(scopes, state, showDialog));
-});
-
-/**
- * The /callback endpoint - hit after the user logs in to spotifyApi
- * Verify that the state we put in the cookie matches the state in the query
- * parameter. Then, if all is good, redirect the user to the user page. If all
- * is not good, redirect the user to an error page
- */
-app.get('/callback', (req, res) => {
-  const { code, state } = req.query;
-  const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
-  // first do state validation
-  if (state === null || state !== storedState) { res.redirect('/#/error/state mismatch'); }
-  else { // if the state is valid, get the authorization code and pass it on to the client
-    res.clearCookie(STATE_KEY);
-    // Retrieve an access token and a refresh token
-    spotifyApi.authorizationCodeGrant(code).then(data => {
-      console.log(data.body);
-      const { expires_in, access_token, refresh_token } = data.body;
-
-      // Set the access token on the API object to use it in later calls
-      spotifyApi.setAccessToken(access_token);
-      spotifyApi.setRefreshToken(refresh_token);
-
-      // use the access token to access the Spotify Web API
-      spotifyApi.getMe().then(({ body }) => {
-        let newUser = body;
-        console.log(newUser);
-        // knex('users').where('spotify_id', newUser.id).first().then(user => {
-        //   user.access_token = access_token;
-        //   user.refresh_token = refresh_token;
-        //   user.authorization_code = code;
-        //   console.log(user);
-        //   console.log('wut');
-        //   let string = encodeURIComponent(JSON.stringify(user));
-        //   res.redirect('localhost:3000/?' + string);
-        // });
-      });
-
-      // we can also pass the token to the browser to make requests from there
-      const tokens = encodeURIComponent(JSON.stringify(data.body));
-      const url = 'http://localhost:3000/interface/?' + tokens;
-      console.log(url)
-      res.redirect(url);
-      res.end();
-    }).catch(err => {
-      res.redirect('localhost:3000/error/invalid token');
-    });
-  }
-});
-
-app.get('/refresh/:refresh_token', (req, res) => {
-  spotifyApi.setRefreshToken(req.params.refresh_token);
-  spotifyApi.refreshAccessToken()
-  .then(data => {
-    console.log(data);
-    data.body.refresh_token = req.params.refresh_token;
-    const tokens = encodeURIComponent(JSON.stringify(data.body));
-    const url = "http://localhost:3000/interface/?" + tokens;
-    res.redirect(url);
-  }, err => console.log('Access token could not be refreshed because: ', err));
-});
-
-
-
 // app.use(passport.initialize());
 // app.use(passport.session());
 // app.get(
